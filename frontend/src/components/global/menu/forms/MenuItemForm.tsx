@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../../../ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup } from "../../../ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogFooter, DialogTitle, DialogDescription } from "../../../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "../../../ui/dialog"
 
 import { useToast } from "@/components/hooks/use-toast"
 
@@ -78,7 +78,7 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
             } else {
                 await addMenuItem(formData as any).unwrap();
             }
-            await resetAllFields()
+            resetAllFields()
             setIsEditing(false)
         } catch (err) {
             toast({

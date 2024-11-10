@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -15,9 +15,9 @@ import { Label } from "@/components/ui/label"
 import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 
-import { setToken, setUser } from '@/store/slices/authSlice'
+import { setToken } from '@/store/slices/authSlice'
 import { loginSchema } from '@/lib/schema'
-import { useGetUserDeatailsQuery, useLoginMutation } from '@/store/apis/authApi'
+import { useLoginMutation } from '@/store/apis/authApi'
 import { selectToken } from '@/store/slices/authSlice'
 
 export default function LoginPage() {
@@ -35,7 +35,7 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     })
 
-    const { handleSubmit, control, formState: { errors } } = loginForm
+    const { handleSubmit, control, formState } = loginForm
 
     const [login, loginResult] = useLoginMutation()
 
@@ -151,7 +151,7 @@ export default function LoginPage() {
                         exit={{ opacity: 0, x: -50 }}
                     >
                         <p className="text-sm text-muted-foreground">
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <Link href="/register" className="text-primary hover:underline">
                                 Register here
                             </Link>

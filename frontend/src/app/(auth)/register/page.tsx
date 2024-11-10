@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setToken, selectUser, setUser } from '@/store/slices/authSlice'
+import { setToken, selectUser } from '@/store/slices/authSlice'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowRight, ArrowLeft, Upload, User, Copy, Loader2 } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -66,7 +66,6 @@ export default function Component() {
     })
 
     const { handleSubmit, control, setValue, watch, formState: { errors } } = registerForm;
-    const profilePicture = watch("profilePicture");
 
     const submitOtp = (data: z.infer<typeof registerSchema>) => {
         console.log(data);

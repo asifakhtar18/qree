@@ -10,6 +10,8 @@ import { CustomModal } from "../modal/CustomModal"
 import { Category, Dish } from "@/types/types"
 import { useDeleteMenuItemMutation, useToggleIsBestSellerMutation } from "@/store/apis/menuApi"
 
+import dishPlaceholder from "../../../../public/dish_placeholder.jpeg"
+
 
 
 
@@ -36,8 +38,8 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
         return acc
     }, {} as Record<string, Dish[]>)
 
-    const [deleteMenuItem, deleteMenuItemResult] = useDeleteMenuItemMutation();
-    const [toggleIsBestSeller, toggleIsBestSellerResult] = useToggleIsBestSellerMutation();
+    const [deleteMenuItem] = useDeleteMenuItemMutation();
+    const [toggleIsBestSeller] = useToggleIsBestSellerMutation();
 
 
 
@@ -132,7 +134,7 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
                                                             ) :
                                                                 (
                                                                     <div className="m-auto w-full h-28 bg-gray-200 rounded-md flex items-center justify-center">
-                                                                        <Image src="/images/placeholder.png" width={120} height={80} alt="food placeholder" className="object-cover opacity-50 " />
+                                                                        <Image src={dishPlaceholder} width={120} height={80} alt="food placeholder" className="object-cover opacity-50 " />
                                                                     </div>
                                                                 )
                                                             }

@@ -1,23 +1,26 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { User, Store, Phone, MapPin, Mail, ArrowLeft } from 'lucide-react'
+
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { User, Store, Phone, MapPin, Mail, Loader2, ArrowLeft } from 'lucide-react'
+
 import IconInput from '@/components/global/input/IconInput'
 import ProfilePicture from '@/components/global/input/profilePicUpload'
-import { useUpdateUserMutation, useGetUserDeatailsQuery } from '@/store/apis/authApi'
+import GlobalLoader from '@/components/global/loaders/GlobalLoader'
+
 import { ownerSchema } from '@/lib/schema'
+import { useUpdateUserMutation, useGetUserDeatailsQuery } from '@/store/apis/authApi'
 
 type OwnerDetails = z.infer<typeof ownerSchema>
 
 export default function OwnerProfile() {
-    const [dataChanged, setDataChanged] = useState(false)
+
     const router = useRouter()
 
     const { control, setValue, handleSubmit, formState: { errors, isDirty } } = useForm<OwnerDetails>({
@@ -32,55 +35,58 @@ export default function OwnerProfile() {
         }
     })
 
-    const [updateUser, updateUserResult] = useUpdateUserMutation()
-    const { data, isLoading } = useGetUserDeatailsQuery(undefined)
+    const [updateUser] = useUpdateUserMutation()
+    const { data: user, isLoading } = useGetUserDeatailsQuery(undefined)
 
 
     useEffect(() => {
-        if (data) {
-            setValue('ownerName', data.user?.name || '')
-            setValue('restaurantName', data.user?.restaurantName || '')
-            setValue('phoneNumber', data.user?.phoneNumber || '')
-            setValue('address', data.user?.address || '')
-            setValue('email', data.user?.email || '')
-            setValue('profilePicture', data.user?.profilePic || '')
+        if (user) {
+            setValue('ownerName', user.user?.name || '')
+            setValue('restaurantName', user.user?.restaurantName || '')
+            setValue('phoneNumber', user.user?.phoneNumber || '')
+            setValue('address', user.user?.address || '')
+            setValue('email', user.user?.email || '')
+            setValue('profilePicture', user.user?.profilePic || '')
         }
-    }, [data])
+    }, [user])
 
-
-    useEffect(() => {
-        if (isDirty) {
-            setDataChanged(true)
-        }
-    }, [isDirty])
 
 
     const onSubmit = async (data: OwnerDetails) => {
 
-
-        console.log(data)
-
         const formData = new FormData();
-        formData.append('name', data.ownerName || '');
-        formData.append('restaurantName', data.restaurantName || '');
-        formData.append('phoneNumber', data.phoneNumber || '');
-        formData.append('address', data.address || '');
-        formData.append('email', data.email || '');
+        formData.append('name', data.ownerName || user?.user?.name || '');
+        formData.append('restaurantName', data.restaurantName || user?.user?.restaurantName || '');
+        formData.append('phoneNumber', data.phoneNumber || user?.user?.phoneNumber || '');
+        formData.append('address', data.address || user?.user?.address || '');
+        formData.append('email', data.email || user?.user?.email || '');
 
         if (data.profilePicture instanceof File) {
             formData.append('profilePicture', data.profilePicture);
+        } else {
+            formData.append('profilePicture', user?.user?.profilePic || '');
         }
 
-        const response = await updateUser(formData);
-        console.log(response)
+
+
+        await updateUser(formData);
+
     }
 
     const handleProfilePictureChange = (file: File) => {
         if (file) {
             setValue('profilePicture', file)
-            setDataChanged(true)
         }
     }
+
+
+    if (isLoading) {
+        return (
+            <GlobalLoader />
+        )
+    }
+
+
 
 
     return (
@@ -101,7 +107,7 @@ export default function OwnerProfile() {
                 </div>
                 <form className="space-y-4 ">
                     <ProfilePicture
-                        profilePicture={data?.user?.profilePic || ''}
+                        profilePicture={user?.user?.profilePic || ''}
                         handleFileChange={(file: any) => handleProfilePictureChange(file)}
                     />
                     <div className="space-y-2">
@@ -189,6 +195,7 @@ export default function OwnerProfile() {
                 <Button onClick={handleSubmit(onSubmit)} className="w-full mt-4">
                     Save
                 </Button>
+
             </div>
         </motion.div>
     )

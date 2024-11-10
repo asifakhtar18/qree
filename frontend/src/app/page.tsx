@@ -80,7 +80,7 @@ export default function HomePage() {
         <Header />
 
         <h1 className="text-xl font-bold text-zinc-800 m-2 mb-4 text-center">
-          Effortlessly manage your restaurant's menu
+          Effortlessly manage your restaurant&apos;s menu
         </h1>
         <div className='flex gap-4 justify-center'>
           <Button

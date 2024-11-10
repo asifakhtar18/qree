@@ -8,7 +8,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+
 } from "@/components/ui/dialog"
 import {
     Drawer,
@@ -18,7 +18,7 @@ import {
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
-    DrawerTrigger,
+
 } from "@/components/ui/drawer"
 
 
@@ -34,7 +34,7 @@ interface CustomModalProps {
 
 
 export function CustomModal({ openModal, setOpenModal, title, description, btnType = "default", confirmAction }: CustomModalProps) {
-    const [open, setOpen] = React.useState(false)
+
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
     if (isDesktop) {

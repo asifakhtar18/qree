@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { CircleDashedIcon, PlusCircle } from "lucide-react"
+import { CircleDashedIcon } from "lucide-react"
 import { Button } from "../../../ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogFooter, DialogTitle, DialogDescription } from "../../../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "../../../ui/dialog"
 import { Input } from "../../../ui/input"
 import { Label } from "../../../ui/label"
 
@@ -26,7 +26,7 @@ interface MenuCatagoriesFormProps {
 
 
 
-const MenuCatagoriesForm = ({ categories, isCategoryDialogOpen, setIsCategoryDialogOpen, isEditing, setIsEditing, value }: MenuCatagoriesFormProps) => {
+const MenuCatagoriesForm = ({ isCategoryDialogOpen, setIsCategoryDialogOpen, isEditing, setIsEditing, value }: MenuCatagoriesFormProps) => {
     const [newCategory, setNewCategory] = useState('')
     const [addFoodCatagory, addFoodCatagoryResult] = useAddFoodCatagoryMutation()
 

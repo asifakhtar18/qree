@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CookingPot, Delete, Edit, Edit2, Edit2Icon, Edit3, Edit3Icon, EditIcon, Menu, Trash, Trash2 } from "lucide-react"
+import { CookingPot, Edit, Menu, Trash2 } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../../ui/card"
 import { Category } from "@/types/types"
 import { useDeleteFoodCatagoryMutation } from "@/store/apis/foodCatagoryApi"
@@ -29,7 +29,7 @@ const DishCategoriesList = ({ categories, setIsEditing, setValueToEdit, setIsCat
 
 
 
-    const [deleteFoodCatagory, deleteFoodCatagoryResult] = useDeleteFoodCatagoryMutation();
+    const [deleteFoodCatagory] = useDeleteFoodCatagoryMutation();
 
     const handleEditCategory = (category: Category) => {
         setIsEditing(true);

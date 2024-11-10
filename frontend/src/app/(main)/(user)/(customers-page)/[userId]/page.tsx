@@ -2,16 +2,19 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
+import Image from 'next/image'
 import { useSelector } from 'react-redux'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Search, Utensils, Leaf, Beef, Star, MapPin, Phone, Mail, Globe, Clock } from 'lucide-react'
+import { Utensils, Star, MapPin, Phone, Mail, Globe, Clock } from 'lucide-react'
 import { Dish } from '@/types/types'
 import { useGetUserMenuQuery } from '@/store/apis/getMenuApi'
 import { selectUser } from '@/store/slices/authSlice'
+
+import dishPlaceholder from '../../../../../../public/dish_placeholder.jpeg'
 
 
 
@@ -28,8 +31,6 @@ export default function CustomerMenu() {
 
     const user = useSelector(selectUser)
 
-    console.log("user", user)
-
 
     const { data: menu, isSuccess } = useGetUserMenuQuery(userId as string)
 
@@ -40,7 +41,7 @@ export default function CustomerMenu() {
             setDishes(menu.MenuItems)
             setFilteredDishes(menu.MenuItems)
         }
-    }, [isSuccess])
+    }, [isSuccess, menu.MenuItems])
 
 
     useEffect(() => {
@@ -185,7 +186,14 @@ export default function CustomerMenu() {
                                             >
                                                 <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                                                     <CardHeader className="p-0">
-                                                        <img src={dish.image ? dish.image : ''} alt={dish.name} className="w-full h-48 object-cover" />
+                                                        <Image
+                                                            src={dish.image ? dish.image : dishPlaceholder}
+                                                            alt={dish.name}
+                                                            height={200}
+                                                            width={200}
+                                                            priority={true}
+                                                            className="w-full h-48 object-cover"
+                                                        />
                                                     </CardHeader>
                                                     <CardContent className="p-4">
                                                         <div className="flex justify-between items-start mb-2">
@@ -211,7 +219,11 @@ export default function CustomerMenu() {
                                                                         <DialogTitle>{selectedDish?.name}</DialogTitle>
                                                                     </DialogHeader>
                                                                     <div className="mt-4">
-                                                                        <img src={selectedDish?.image ? selectedDish?.image : ''} alt={selectedDish?.name} className="w-full h-64 object-cover rounded-md mb-4" />
+                                                                        <Image
+                                                                            src={selectedDish?.image ?
+                                                                                selectedDish?.image : dishPlaceholder}
+                                                                            className="w-full h-64 object-cover rounded-md mb-4"
+                                                                        />
                                                                         <p className="text-gray-600 mb-4">{selectedDish?.description}</p>
                                                                         <p className="font-semibold text-lg mb-2">${selectedDish?.price}</p>
 
