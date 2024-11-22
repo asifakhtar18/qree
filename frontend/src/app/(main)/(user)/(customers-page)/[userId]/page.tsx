@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Utensils, Star, MapPin, Phone, Mail, Globe, Clock } from 'lucide-react'
 import { Dish } from '@/types/types'
 import { useGetUserMenuQuery } from '@/store/apis/getMenuApi'
-import dishPlaceholder from '../../../../../../public/dish_placeholder.jpeg'
+import EmptyCustomerMenu from '@/components/global/loaders/EmptyCustomerMenu'
 
 
 
@@ -32,10 +32,13 @@ export default function CustomerMenu() {
 
     useEffect(() => {
         if (isSuccess) {
-            setDishes(menu.MenuItems)
-            setFilteredDishes(menu.MenuItems)
+            const { MenuItems } = menu
+            if (MenuItems.length > 0) {
+                setDishes(MenuItems)
+                setFilteredDishes(MenuItems)
+            }
         }
-    }, [isSuccess, menu.MenuItems])
+    }, [isSuccess, menu?.MenuItems])
 
 
     useEffect(() => {
@@ -46,13 +49,13 @@ export default function CustomerMenu() {
         let filtered = dishes
 
         if (tab == 'bestseller') {
-            filtered = filtered?.filter(dish => dish.isBestSeller)
+            filtered = filtered?.filter(dish => dish?.isBestSeller)
         }
 
         if (search) {
             filtered = filtered?.filter(dish =>
-                dish.name.toLowerCase().includes(search.toLowerCase()) ||
-                dish.description.toLowerCase().includes(search.toLowerCase())
+                dish?.name.toLowerCase().includes(search.toLowerCase()) ||
+                dish?.description.toLowerCase().includes(search.toLowerCase())
             )
         }
 
@@ -74,13 +77,17 @@ export default function CustomerMenu() {
     }
 
     const groupedDishes = filteredDishes?.reduce((acc, dish) => {
-        if (!acc[dish.category]) {
-            acc[dish.category] = []
+        if (!acc[dish?.category]) {
+            acc[dish?.category] = []
         }
-        acc[dish.category].push(dish)
+        acc[dish?.category].push(dish)
         return acc
     }, {} as Record<string, Dish[]>)
 
+
+    if (!menu?.MenuItems) {
+        return <EmptyCustomerMenu />
+    }
 
 
     return (
@@ -171,9 +178,9 @@ export default function CustomerMenu() {
                                 <div key={category} className="mb-12">
                                     <h2 className="text-2xl font-semibold mb-6 text-gray-800">{category}</h2>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {dishes.map(dish => (
+                                        {dishes?.map(dish => (
                                             <motion.div
-                                                key={dish._id}
+                                                key={dish?._id}
                                                 initial={{ opacity: 0, scale: 0.9 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ duration: 0.3 }}
@@ -197,17 +204,17 @@ export default function CustomerMenu() {
                                                     </CardHeader>
                                                     <CardContent className="p-4">
                                                         <div className="flex justify-between items-start mb-2">
-                                                            <CardTitle className="text-lg">{dish.name}</CardTitle>
-                                                            {dish.isBestSeller && (
+                                                            <CardTitle className="text-lg">{dish?.name}</CardTitle>
+                                                            {dish?.isBestSeller && (
                                                                 <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
                                                                     <Star className="h-3 w-3 mr-1" fill="currentColor" />
                                                                     Best Seller
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <CardDescription className="text-sm text-gray-600 mb-4">{dish.description}</CardDescription>
+                                                        <CardDescription className="text-sm text-gray-600 mb-4">{dish?.description}</CardDescription>
                                                         <div className="flex justify-between items-center">
-                                                            <span className="font-semibold text-lg">${dish.price}</span>
+                                                            <span className="font-semibold text-lg">${dish?.price}</span>
                                                             <Dialog>
                                                                 <DialogTrigger asChild>
                                                                     <Button variant="outline" size="sm" onClick={() => setSelectedDish(dish)}>
