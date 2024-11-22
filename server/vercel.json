@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "framework": "node",
+  "outputDirectory": ".",
   "builds": [
     {
       "src": "src/index.js",
