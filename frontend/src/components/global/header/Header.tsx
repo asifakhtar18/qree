@@ -10,7 +10,7 @@ const Header = () => {
                     <QrCodeIcon className="mr-2 h-8 w-8" />
                     <h1 className="text-3xl sm:text-4xl font-bold text-black mb-2">Qree</h1>
                 </div>
-                <p className="text-gray-600">Effortlessly manage your restaurant's menu</p>
+                <p className="text-gray-600">Effortlessly manage your restaurant&apos;s menu</p>
             </div>
             <UserMenu />
         </header>

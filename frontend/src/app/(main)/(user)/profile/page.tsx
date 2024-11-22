@@ -23,7 +23,7 @@ export default function OwnerProfile() {
 
     const router = useRouter()
 
-    const { control, setValue, handleSubmit, formState: { errors, isDirty } } = useForm<OwnerDetails>({
+    const { control, setValue, handleSubmit, formState: { errors } } = useForm<OwnerDetails>({
         resolver: zodResolver(ownerSchema),
         defaultValues: {
             ownerName: '',

@@ -35,7 +35,7 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     })
 
-    const { handleSubmit, control, formState } = loginForm
+    const { handleSubmit, control } = loginForm
 
     const [login, loginResult] = useLoginMutation()
 

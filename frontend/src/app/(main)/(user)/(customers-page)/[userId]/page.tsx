@@ -29,9 +29,6 @@ export default function CustomerMenu() {
 
     const { userId } = useParams()
 
-    const user = useSelector(selectUser)
-
-
     const { data: menu, isSuccess } = useGetUserMenuQuery(userId as string)
 
 

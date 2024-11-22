@@ -65,7 +65,7 @@ export default function Component() {
         },
     })
 
-    const { handleSubmit, control, setValue, watch, formState: { errors } } = registerForm;
+    const { handleSubmit, control, setValue, formState: { errors } } = registerForm;
 
     const submitOtp = (data: z.infer<typeof registerSchema>) => {
         console.log(data);
