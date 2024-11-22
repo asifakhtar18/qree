@@ -1,7 +1,7 @@
 
 
 import React, { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 
@@ -49,7 +49,7 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
     })
 
 
-    const { handleSubmit, control, reset, setValue, formState: { errors } } = menuItems
+    const { handleSubmit, control, reset, setValue } = menuItems
     const [addMenuItem, addMenuItemResult] = useAddMenuItemMutation()
     const [updateMenuItem, updateMenuItemResult] = useUpdateMenuItemMutation()
 
@@ -68,19 +68,52 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
 
 
 
-    const handleAddDish = async (data: FormData) => {
+    // const handleAddDish = async (data: FormData) => {
+    //     try {
+    //         const formData = new FormData();
+    //         Object.entries(data).forEach(([key, value]) => formData.append(key, value as string));
+    //         if (data && data.hasOwnProperty('_id') && isEditing) {
+    //             await updateMenuItem(formData).unwrap();
+    //             setIsDishDialogOpen(false)
+    //         } else {
+    //             await addMenuItem(formData).unwrap();
+    //         }
+    //         resetAllFields()
+    //         setIsEditing(false)
+    //     } catch (err) {
+    //         toast({
+    //             variant: "destructive",
+    //             title: "Error",
+    //             description: "Something went wrong",
+    //         })
+    //     }
+    // }
+
+    const handleAddDish: SubmitHandler<Omit<Dish, 'id'>> = async (data) => {
         try {
             const formData = new FormData();
             Object.entries(data).forEach(([key, value]) => formData.append(key, value as string));
+
+            const dish: Dish = {
+                _id: formData.get('_id') as string,
+                name: formData.get('name') as string,
+                category: formData.get('category') as string,
+                description: formData.get('description') as string,
+                price: formData.get('price') as string,
+                isBestSeller: formData.get('isBestSeller') === 'true' ? true : false,
+                image: formData.get('image') as string | Blob,
+            };
+
             if (data && data.hasOwnProperty('_id') && isEditing) {
-                await updateMenuItem(formData as any).unwrap();
+                await updateMenuItem(dish).unwrap();
                 setIsDishDialogOpen(false)
             } else {
-                await addMenuItem(formData as any).unwrap();
+                await addMenuItem(dish).unwrap();
             }
             resetAllFields()
             setIsEditing(false)
         } catch (err) {
+            console.log(err);
             toast({
                 variant: "destructive",
                 title: "Error",
@@ -196,7 +229,7 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
                                     <FormField
                                         control={control}
                                         name="image"
-                                        render={({ field: { onChange, value }, fieldState: { error } }) => {
+                                        render={({ field: { onChange, value } }) => {
                                             const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                                                 if (e.target.files?.length) {
                                                     onChange(e.target.files[0])
@@ -303,7 +336,7 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
                         </ScrollArea>
                     </Form>
                     <DialogFooter>
-                        <Button disabled={addMenuItemResult.isLoading || updateMenuItemResult.isLoading} onClick={handleSubmit(handleAddDish as any)} className="bg-black hover:bg-gray-800 text-white">
+                        <Button disabled={addMenuItemResult.isLoading || updateMenuItemResult.isLoading} onClick={handleSubmit(handleAddDish)} className="bg-black hover:bg-gray-800 text-white">
                             {
                                 addMenuItemResult.isLoading || updateMenuItemResult.isLoading ? (
                                     <>

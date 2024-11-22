@@ -97,7 +97,7 @@ export default function HomePage() {
 
 
 
-        {/* <Image
+        <Image
           src={data?.user?.qrCode}
           alt="qrCode"
           width={200}
@@ -112,7 +112,7 @@ export default function HomePage() {
           >
             Download QR Code
           </a>
-        </div> */}
+        </div>
 
 
         <div className="flex gap-4 justify-center">

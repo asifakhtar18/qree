@@ -17,8 +17,12 @@ import {
 
 
 
+interface InputOTPFormProps {
+    form: any
+    onSubmit: any
+}
 
-export function InputOTPForm({ form, onSubmit }: any) {
+export function InputOTPForm({ form, onSubmit }: InputOTPFormProps) {
 
     return (
         <Form {...form}>

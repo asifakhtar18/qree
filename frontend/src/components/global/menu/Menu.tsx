@@ -52,7 +52,7 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
 
     const deleteDish = async () => {
         try {
-            dishIdToDelete && await deleteMenuItem(dishIdToDelete)
+            await deleteMenuItem(dishIdToDelete as string)
             setIsDeleteItemModalOpen(false)
         } catch (error) {
             console.error("Failed to delete dish:", error)

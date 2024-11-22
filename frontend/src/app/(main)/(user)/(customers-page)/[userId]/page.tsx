@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
-import { useSelector } from 'react-redux'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,8 +11,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Utensils, Star, MapPin, Phone, Mail, Globe, Clock } from 'lucide-react'
 import { Dish } from '@/types/types'
 import { useGetUserMenuQuery } from '@/store/apis/getMenuApi'
-import { selectUser } from '@/store/slices/authSlice'
-
 import dishPlaceholder from '../../../../../../public/dish_placeholder.jpeg'
 
 
