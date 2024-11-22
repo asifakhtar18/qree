@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { useToast } from '@/components/hooks/use-toast'
 
 import { setToken } from '@/store/slices/authSlice'
 import { loginSchema } from '@/lib/schema'
@@ -26,6 +27,8 @@ export default function LoginPage() {
     const token = useSelector(selectToken)
     const router = useRouter()
     const dispatch = useDispatch()
+
+    const { toast } = useToast()
 
     if (token) {
         router.push('/')
@@ -50,6 +53,11 @@ export default function LoginPage() {
         catch (err) {
             console.log(err)
             setIsLoading(false)
+            toast({
+                title: "Error",
+                description: "Invalid credentials",
+                variant: "destructive",
+            })
         }
     }
 
@@ -120,7 +128,6 @@ export default function LoginPage() {
                                     </motion.div>
                                 </div>
                             </div>
-                            {loginResult.error && <p className="text-sm text-red-600 mt-2 text-center">{loginResult?.error?.data?.message || "Something went wrong"}</p>}
                             <motion.div
                                 initial={{ opacity: 0, x: 50 }}
                                 animate={{ opacity: 1, x: 0, transition: { delay: 0.4 } }}
