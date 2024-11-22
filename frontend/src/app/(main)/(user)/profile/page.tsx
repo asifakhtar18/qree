@@ -108,7 +108,7 @@ export default function OwnerProfile() {
                 <form className="space-y-4 ">
                     <ProfilePicture
                         profilePicture={user?.user?.profilePic || ''}
-                        handleFileChange={(file: File) => handleProfilePictureChange(file)}
+                        handleFileChange={(file) => handleProfilePictureChange(file as File)}
                     />
                     <div className="space-y-2">
                         <Label htmlFor="ownerName">Owner Name</Label>

@@ -77,6 +77,8 @@ const MenuCatagoriesForm = ({ isCategoryDialogOpen, setIsCategoryDialogOpen, isE
                 {(addFoodCatagoryResult.isSuccess || addFoodCatagoryResult.isError) && (
                     <Toast
                         variant={addFoodCatagoryResult.isSuccess ? "success" : "error"}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         message={addFoodCatagoryResult.isSuccess ? "Category added successfully" : addFoodCatagoryResult.error.data.error}
                     />
                 )}

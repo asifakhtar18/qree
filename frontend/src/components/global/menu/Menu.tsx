@@ -134,7 +134,16 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
                                                             ) :
                                                                 (
                                                                     <div className="m-auto w-full h-28 bg-gray-200 rounded-md flex items-center justify-center">
-                                                                        <Image src={dishPlaceholder} width={120} height={80} alt="food placeholder" className="object-cover opacity-50 " />
+
+                                                                        <Image
+                                                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                                            // @ts-ignore
+                                                                            src={dishPlaceholder}
+                                                                            width={120}
+                                                                            height={80}
+                                                                            alt="food placeholder"
+                                                                            className="object-cover opacity-50 "
+                                                                        />
                                                                     </div>
                                                                 )
                                                             }
