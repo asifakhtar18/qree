@@ -19,7 +19,9 @@
     "no-console": "off",
     "no-debugger": "off",
     "no-undef": "off",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off"
   },
   "overrides": [
     {

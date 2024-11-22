@@ -180,14 +180,20 @@ export default function CustomerMenu() {
                                             >
                                                 <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                                                     <CardHeader className="p-0">
-                                                        <Image
-                                                            src={dish.image ? dish.image : dishPlaceholder}
-                                                            alt={dish.name}
-                                                            height={200}
-                                                            width={200}
-                                                            priority={true}
-                                                            className="w-full h-48 object-cover"
-                                                        />
+                                                        {dish?.image ? (
+                                                            <Image
+                                                                src={typeof dish.image === 'string' ? dish.image : URL.createObjectURL(dish.image)}
+                                                                alt={dish.name}
+                                                                width={300}
+                                                                height={300}
+                                                                className="w-full h-48 object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                                                No image
+                                                            </div>
+                                                        )
+                                                        }
                                                     </CardHeader>
                                                     <CardContent className="p-4">
                                                         <div className="flex justify-between items-start mb-2">
@@ -214,10 +220,14 @@ export default function CustomerMenu() {
                                                                     </DialogHeader>
                                                                     <div className="mt-4">
                                                                         <Image
-                                                                            src={selectedDish?.image ?
-                                                                                selectedDish?.image : dishPlaceholder}
+                                                                            width={300}
+                                                                            height={300}
+                                                                            // @ts-ignore
+                                                                            src={typeof selectedDish?.image === 'string' ? selectedDish?.image : null}
+                                                                            alt='Dish Image'
                                                                             className="w-full h-64 object-cover rounded-md mb-4"
                                                                         />
+
                                                                         <p className="text-gray-600 mb-4">{selectedDish?.description}</p>
                                                                         <p className="font-semibold text-lg mb-2">${selectedDish?.price}</p>
 

@@ -204,9 +204,6 @@ export default function Component() {
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
-                                                    {registerResult.isError && (
-                                                        <p className="text-red-500">{registerResult?.error?.data?.message || "Something went wrong"}</p>
-                                                    )}
                                                 </FormItem>
                                             )}
                                         />
@@ -225,9 +222,6 @@ export default function Component() {
                                                 onSubmit={submitOtp}
                                                 form={otpForm}
                                             />
-                                            {verifyEmailResult.isError && (
-                                                <p className="text-red-500 text-center">{verifyEmailResult?.error?.data?.message}</p>
-                                            )}
                                         </div>
 
                                     </motion.div>
