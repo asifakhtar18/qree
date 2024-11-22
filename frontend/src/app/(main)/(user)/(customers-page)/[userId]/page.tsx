@@ -222,7 +222,7 @@ export default function CustomerMenu() {
                                                                         <Image
                                                                             width={300}
                                                                             height={300}
-                                                                            // @ts-ignore
+                                                                            // @ts-expect-error
                                                                             src={typeof selectedDish?.image === 'string' ? selectedDish?.image : null}
                                                                             alt='Dish Image'
                                                                             className="w-full h-64 object-cover rounded-md mb-4"
