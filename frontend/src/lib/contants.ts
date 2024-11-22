@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 export const registerPageTexts = [
   {
     title: "Create Your Account",
@@ -14,3 +13,5 @@ export const registerPageTexts = [
     description: "Enter your details to complete your profile.",
   },
 ];
+
+export const BASE_API_URL = "https://qree-server.vercel.app";

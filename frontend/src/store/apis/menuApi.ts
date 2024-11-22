@@ -1,9 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Dish } from "@/types/types";
+import { BASE_API_URL } from "@/lib/contants";
+
 export const menuApi = createApi({
   reducerPath: "menuApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/menu",
+    baseUrl: `${BASE_API_URL}/api/menu`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as any).auth.token;
       if (token) {

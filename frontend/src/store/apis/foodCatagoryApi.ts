@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BASE_API_URL } from "@/lib/contants";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api/food-category",
+  baseUrl: `${BASE_API_URL}/api/food-category`,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as any).auth.token;
     if (token) {
