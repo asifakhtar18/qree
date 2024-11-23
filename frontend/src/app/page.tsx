@@ -77,7 +77,7 @@ export default function HomePage() {
         transition={{ duration: 0.5 }}
         className="max-w-7xl mx-auto"
       >
-        <Header />
+        <Header qrCode={data?.user?.qrCode} />
 
         <h1 className="text-xl font-bold text-zinc-800 m-2 mb-4 text-center">
           Effortlessly manage your restaurant&apos;s menu
@@ -95,24 +95,6 @@ export default function HomePage() {
           </Button>
         </div>
 
-
-
-        <Image
-          src={data?.user?.qrCode}
-          alt="qrCode"
-          width={200}
-          height={200}
-          className="mb-4"
-        />
-
-        <div>
-          <a
-            href={data?.user?.qrCode}
-            download
-          >
-            Download QR Code
-          </a>
-        </div>
 
 
         <div className="flex gap-4 justify-center">

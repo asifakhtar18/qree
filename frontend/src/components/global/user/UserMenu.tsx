@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { useDispatch, useSelector } from "react-redux"
 import { LogOut, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
@@ -13,7 +14,7 @@ import {
 } from "../../ui/dropdown-menu"
 import { logout, selectUser } from "@/store/slices/authSlice"
 
-const UserMenu = () => {
+const UserMenu = ({ qrCode }: { qrCode: string }) => {
 
     const Router = useRouter();
     const dispatch = useDispatch();
@@ -49,12 +50,28 @@ const UserMenu = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={gotoProfilePage}
+                    className="cursor-pointer pt-2 pb-2 "
                 >
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                    className="flex flex-col items-center border border-gray-200 cursor-pointer pt-2 pb-2 "
+                >
+                    <Image
+                        src={qrCode}
+                        alt="qrCode"
+                        width={200}
+                        height={200}
+                    />
+                    <a href={qrCode} target="_blank" download={name + '.png'}>Download QR Code</a>
+
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
                     onClick={handleLogout}
+                    className="cursor-pointer pt-2 text-red-600 "
+
                 >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>

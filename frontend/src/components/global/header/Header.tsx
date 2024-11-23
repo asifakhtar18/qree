@@ -1,7 +1,7 @@
 import { QrCodeIcon } from "lucide-react"
 import UserMenu from "../user/UserMenu"
 
-const Header = () => {
+const Header = ({ qrCode }: { qrCode: string }) => {
     return (
         <header className="flex justify-between items-center mb-8">
             <div>
@@ -12,7 +12,7 @@ const Header = () => {
                 </div>
                 <p className="text-gray-600">Effortlessly manage your restaurant&apos;s menu</p>
             </div>
-            <UserMenu />
+            <UserMenu qrCode={qrCode} />
         </header>
     )
 }
