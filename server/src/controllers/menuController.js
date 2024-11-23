@@ -35,7 +35,6 @@ exports.addMenuItem = async (req, res) => {
         }
         const { name, category, description, price, isBestSeller, image } = req.body;
         const newMenuItem = await MenuItem.create({ user, name, category, description, price, isBestSeller, image });
-        console.log(newMenuItem);
         res.status(201).json(newMenuItem);
     } catch (error) {
         const { name, message, keyValue } = error;

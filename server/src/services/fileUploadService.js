@@ -11,10 +11,6 @@ admin.initializeApp({
 const bucket = admin.storage().bucket(process.env.FIREBASE_STORAGE_BUCKET);
 
 
-const generateBuffer = async (file) => {
-
-}
-
 
 
 const uploadFile = async (file) => {

@@ -94,12 +94,11 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
             const formData = new FormData();
             Object.entries(data).forEach(([key, value]) => formData.append(key, value as string));
 
-
             if (data && data.hasOwnProperty('_id') && isEditing) {
-                await updateMenuItem(formData).unwrap();
+                await updateMenuItem(formData as any).unwrap();
                 setIsDishDialogOpen(false)
             } else {
-                await addMenuItem(formData).unwrap();
+                await addMenuItem(formData as any).unwrap();
             }
             resetAllFields()
             setIsEditing(false)
