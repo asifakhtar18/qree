@@ -94,21 +94,12 @@ const MenuItemForm = ({ categories, isDishDialogOpen, setIsEditing, setIsDishDia
             const formData = new FormData();
             Object.entries(data).forEach(([key, value]) => formData.append(key, value as string));
 
-            const dish: Dish = {
-                _id: formData.get('_id') as string,
-                name: formData.get('name') as string,
-                category: formData.get('category') as string,
-                description: formData.get('description') as string,
-                price: formData.get('price') as string,
-                isBestSeller: formData.get('isBestSeller') === 'true' ? true : false,
-                image: formData.get('image') as string | Blob,
-            };
 
             if (data && data.hasOwnProperty('_id') && isEditing) {
-                await updateMenuItem(dish).unwrap();
+                await updateMenuItem(formData).unwrap();
                 setIsDishDialogOpen(false)
             } else {
-                await addMenuItem(dish).unwrap();
+                await addMenuItem(formData).unwrap();
             }
             resetAllFields()
             setIsEditing(false)
