@@ -85,7 +85,7 @@ export default function CustomerMenu() {
     }, {} as Record<string, Dish[]>)
 
 
-    if (!menu?.MenuItems) {
+    if (menu?.MenuItems.length <= 0) {
         return <EmptyCustomerMenu />
     }
 

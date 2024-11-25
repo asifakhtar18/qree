@@ -146,7 +146,7 @@ export default function Component() {
         const { restaurantName, email, password, profilePicture } = data
         const formData = new FormData();
         formData.append("profilePicture", profilePicture!);
-        formData.append("name", restaurantName);
+        formData.append("restaurantName", restaurantName);
         formData.append("email", email);
         formData.append("password", password);
         setLoading(true)

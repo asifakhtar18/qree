@@ -6,9 +6,11 @@ const { capitalizeFirstLetter } = require('../utils/helper');
 exports.getFoodCatagory = async (req, res) => {
     const userId = req.query.userId;
     try {
+        if (!userId) {
+            return res.status(400).json({ error: 'User ID is required' });
+        }
         const data = await foodCatagory.find({ userId });
         res.status(200).json(data);
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });

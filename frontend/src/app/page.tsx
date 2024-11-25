@@ -16,7 +16,6 @@ import { useGetMenuItemsQuery } from '@/store/apis/menuApi'
 import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { Dish } from '@/types/types'
-import Image from 'next/image'
 
 
 

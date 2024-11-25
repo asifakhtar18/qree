@@ -143,7 +143,7 @@ export default function OwnerProfile() {
                         {errors.restaurantName && <p className="text-red-500 text-sm">{errors.restaurantName.message}</p>}
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="phoneNumber">phoneNumber Number</Label>
+                        <Label htmlFor="phoneNumber">Phone Number</Label>
                         <Controller
                             name="phoneNumber"
                             control={control}

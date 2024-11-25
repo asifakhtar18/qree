@@ -24,6 +24,7 @@ const UserMenu = ({ qrCode }: { qrCode: string }) => {
     const { email, name, profilePic } = user
 
     const handleLogout = () => {
+        Router.push('/login')
         dispatch(logout())
     }
 
@@ -49,14 +50,7 @@ const UserMenu = ({ qrCode }: { qrCode: string }) => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    onClick={gotoProfilePage}
-                    className="cursor-pointer pt-2 pb-2 "
-                >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                    className="flex flex-col items-center border border-gray-200 cursor-pointer pt-2 pb-2 "
+                    className="flex flex-col items-center cursor-pointer pt-1  bg-gray-50"
                 >
                     <Image
                         src={qrCode}
@@ -68,6 +62,13 @@ const UserMenu = ({ qrCode }: { qrCode: string }) => {
 
                 </DropdownMenuItem>
 
+                <DropdownMenuItem
+                    onClick={gotoProfilePage}
+                    className="cursor-pointer pt-2 pb-2 "
+                >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                     onClick={handleLogout}
                     className="cursor-pointer pt-2 text-red-600 "

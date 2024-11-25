@@ -7,7 +7,7 @@ const dishSchema = new mongoose.Schema({
     description: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
     isBestSeller: { type: Boolean, default: false },
-    image: { type: String, match: /^https?:\/\// },
+    image: { type: String, match: /^https?:\/\//, required: false },
 });
 
 const Dish = mongoose.model('Dish', dishSchema);
