@@ -4,7 +4,7 @@ const { capitalizeFirstLetter } = require('../utils/helper');
 
 
 exports.getFoodCatagory = async (req, res) => {
-    const userId = req.query.userId;
+    const userId = req?.query?.userId;
     try {
         if (!userId) {
             return res.status(400).json({ error: 'User ID is required' });
@@ -18,9 +18,9 @@ exports.getFoodCatagory = async (req, res) => {
 }
 
 exports.addFoodCatagory = async (req, res) => {
-    const userId = req.user.id;
-    const { name } = req.body;
-    const lowerCaseName = name.toLowerCase();
+    const userId = req?.user?.id;
+    const { name } = req?.body;
+    const lowerCaseName = name?.toLowerCase();
 
     try {
         const catagory = await foodCatagory.findOne({ userId, name: { $regex: new RegExp(`^${lowerCaseName}$`, 'i') } });
@@ -38,7 +38,7 @@ exports.addFoodCatagory = async (req, res) => {
 
 
 exports.updateFoodCatagory = async (req, res) => {
-    const userId = req.user.id;
+    const userId = req?.user?.id;
     const { foodCatagoryId, name } = req.body;
     try {
         const catagory = await foodCatagory.findById(foodCatagoryId);
@@ -58,8 +58,8 @@ exports.updateFoodCatagory = async (req, res) => {
 
 
 exports.deleteFoodCatagory = async (req, res) => {
-    const userId = req.user.id;
-    const foodCatagoryId = req.params.id;
+    const userId = req?.user?.id;
+    const foodCatagoryId = req?.params?.id;
     try {
         const catagory = await foodCatagory.findById(foodCatagoryId);
         if (!catagory) {

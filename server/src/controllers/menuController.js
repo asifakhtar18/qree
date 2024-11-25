@@ -8,6 +8,8 @@ const { uploadFile } = require('../services/fileUploadService');
 exports.getMenuItemes = async (req, res) => {
     const { userId } = req.query;
     try {
+        if (!userId) return res.status(400).json({ error: 'User ID is required' });
+
         const MenuItemes = await MenuItem.find({ user: userId })
             .select('-__v -user')
             .lean()
@@ -17,6 +19,7 @@ exports.getMenuItemes = async (req, res) => {
                     price: MenuItem.price.toString(),
                 }))
             );
+
         res.status(200).json(MenuItemes);
     } catch (error) {
         console.error(error);
@@ -26,7 +29,7 @@ exports.getMenuItemes = async (req, res) => {
 
 
 exports.addMenuItem = async (req, res) => {
-    const user = req.user.id;
+    const user = req.user?.id;
     const file = req.file;
     try {
         if (file) {
@@ -50,7 +53,7 @@ exports.addMenuItem = async (req, res) => {
 
 exports.updateMenuItem = async (req, res) => {
     try {
-        const id = req.user.id;
+        const id = req.user?.id;
         const file = req.file;
         if (file) {
             const imageUrl = await uploadFile(req.file);
@@ -79,7 +82,7 @@ exports.updateMenuItem = async (req, res) => {
 
 exports.deleteMenuItem = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const { id } = req.params;
         const item = await MenuItem.findById(id);
         if (!item) return res.status(404).json({ error: 'MenuItem not found' });
@@ -100,8 +103,8 @@ exports.deleteMenuItem = async (req, res) => {
 
 exports.toggleIsBestSeller = async (req, res) => {
     try {
+        const user = req.user?.id;
         const { id } = req.params;
-        const user = req.user.id;
         const item = await MenuItem.findById(id);
         if (!item) return res.status(404).json({ error: 'MenuItem not found' });
 
