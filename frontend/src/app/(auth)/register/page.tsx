@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { AxiosError } from 'axios';
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -82,6 +83,8 @@ export default function Component() {
             catch (err) {
                 setLoading(false)
                 toast({
+                    title: "Error",
+                    // @ts-ignore
                     description: err?.data?.message || "Something went wrong",
                     variant: "destructive",
                     action: <ToastAction altText="Dismiss">Dismiss</ToastAction>,
