@@ -117,8 +117,8 @@ export default function LoginPage() {
                                                     <Input
                                                         id="password"
                                                         type="password"
-
                                                         {...field}
+                                                        onChange={field.onChange}
                                                         placeholder='●●●●●●●'
                                                     />
                                                     <FormMessage />
@@ -151,7 +151,18 @@ export default function LoginPage() {
                         </form>
                     </Form>
                 </CardContent>
-                <CardFooter className="flex justify-center">
+                <CardFooter className="flex flex-col items-center justify-center space-y-2">
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -50 }}
+                    >
+                        <p className="text-sm text-muted-foreground">
+                            <Link href="/forgot-password" className="text-primary hover:underline">
+                                Forgot Password?
+                            </Link>
+                        </p>
+                    </motion.div>
                     <motion.div
                         initial={{ opacity: 0, }}
                         animate={{ opacity: 1, transition: { delay: 0.6, duration: 0.5 } }}

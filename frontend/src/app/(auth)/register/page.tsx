@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken, selectUser } from '@/store/slices/authSlice'
@@ -40,8 +39,6 @@ export default function Component() {
     const [updateUser, updateUserResult] = useUpdateUserMutation()
 
 
-
-
     const user = useSelector(selectUser)
     const router = useRouter()
     const dispatch = useDispatch()
@@ -55,9 +52,6 @@ export default function Component() {
         router.push('/')
     }
 
-
-
-
     const otpForm = useForm<z.infer<typeof OtpSchema>>({
         resolver: zodResolver(OtpSchema),
         defaultValues: {
@@ -66,10 +60,6 @@ export default function Component() {
     })
 
     const { handleSubmit, control, setValue, formState: { errors } } = registerForm;
-
-    const submitOtp = (data: z.infer<typeof registerSchema>) => {
-        console.log(data);
-    }
 
     const handleNext = async () => {
         if (step === 1) {
@@ -90,8 +80,12 @@ export default function Component() {
                 setStep(prev => Math.min(prev + 1, 3))
             }
             catch (err) {
-                console.log(err)
                 setLoading(false)
+                toast({
+                    description: err?.data?.message || "Something went wrong",
+                    variant: "destructive",
+                    action: <ToastAction altText="Dismiss">Dismiss</ToastAction>,
+                })
             }
         }
         if (step === 2) {
@@ -110,7 +104,7 @@ export default function Component() {
                     otp: otpForm.getValues().otp,
                 })
                 setLoading(false)
-                if (res.data.token) {
+                if (res?.data?.token) {
                     console.log("res.data.token", res.data.token)
                     dispatch(setToken(res.data.token))
                     setStep(prev => Math.min(prev + 1, 3))
@@ -118,6 +112,11 @@ export default function Component() {
             } catch (err) {
                 console.log(err)
                 setLoading(false)
+                toast({
+                    description: "Invalid OTP",
+                    variant: "destructive",
+                    action: <ToastAction altText="Dismiss">Dismiss</ToastAction>,
+                })
             }
         }
     };
@@ -160,6 +159,9 @@ export default function Component() {
         }
     }
 
+    const handleOTPSubmit = async (data: z.infer<typeof OtpSchema>) => {
+        console.log(data)
+    }
 
     if (updateUserResult.isSuccess) {
         router.push('/')
@@ -219,8 +221,8 @@ export default function Component() {
                                     >
                                         <div>
                                             <InputOTPForm
-                                                onSubmit={submitOtp}
                                                 form={otpForm}
+                                                onSubmit={handleOTPSubmit}
                                             />
                                         </div>
 
