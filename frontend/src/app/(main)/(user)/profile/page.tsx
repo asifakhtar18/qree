@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { User, Store, Phone, MapPin, Mail, ArrowLeft } from 'lucide-react'
+import { User, Store, Phone, MapPin, Mail, ArrowLeft, Loader2 } from 'lucide-react'
 
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { useToast } from '@/components/hooks/use-toast'
 
 import IconInput from '@/components/global/input/IconInput'
 import ProfilePicture from '@/components/global/input/profilePicUpload'
@@ -16,12 +17,14 @@ import GlobalLoader from '@/components/global/loaders/GlobalLoader'
 
 import { ownerSchema } from '@/lib/schema'
 import { useUpdateUserMutation, useGetUserDeatailsQuery } from '@/store/apis/authApi'
+import { ToastAction } from '@/components/ui/toast'
 
 type OwnerDetails = z.infer<typeof ownerSchema>
 
 export default function OwnerProfile() {
 
     const router = useRouter()
+    const { toast } = useToast()
 
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<OwnerDetails>({
         resolver: zodResolver(ownerSchema),
@@ -35,13 +38,16 @@ export default function OwnerProfile() {
         }
     })
 
-    const [updateUser] = useUpdateUserMutation()
+    console.log(errors)
+
+    const [updateUser, { isLoading: isUpdating, isSuccess: isUpdated, isError: isFailed, error }] = useUpdateUserMutation()
     const { data: user, isLoading } = useGetUserDeatailsQuery(undefined)
 
 
     useEffect(() => {
+
         if (user) {
-            setValue('ownerName', user.user?.name || '')
+            setValue('ownerName', user.user?.ownerName || '')
             setValue('restaurantName', user.user?.restaurantName || '')
             setValue('phoneNumber', user.user?.phoneNumber || '')
             setValue('address', user.user?.address || '')
@@ -51,23 +57,42 @@ export default function OwnerProfile() {
     }, [user])
 
 
+    useEffect(() => {
+        if (isUpdated) {
+            toast({
+                title: 'Success',
+                description: 'Profile updated successfully',
+                duration: 3000,
+                action: <ToastAction altText="Dismiss">Dismiss</ToastAction>,
+            })
+        }
+        if (isFailed) {
+            const updateError = error as { data: { message: string } }
+            toast({
+                title: 'Error',
+                description: updateError?.data?.message,
+                duration: 3000,
+                action: <ToastAction altText="Dismiss">Dismiss</ToastAction>,
+            })
+        }
+    }, [isUpdated])
+
+
 
     const onSubmit = async (data: OwnerDetails) => {
 
         const formData = new FormData();
-        formData.append('name', data.ownerName || user?.user?.name || '');
+        formData.append('ownerName', data.ownerName || user?.user?.ownerName || '');
         formData.append('restaurantName', data.restaurantName || user?.user?.restaurantName || '');
         formData.append('phoneNumber', data.phoneNumber || user?.user?.phoneNumber || '');
         formData.append('address', data.address || user?.user?.address || '');
         formData.append('email', data.email || user?.user?.email || '');
 
-        if (data.profilePicture instanceof File) {
+        if (data?.profilePicture instanceof File) {
             formData.append('profilePicture', data.profilePicture);
         } else {
             formData.append('profilePicture', user?.user?.profilePic || '');
         }
-
-
 
         await updateUser(formData);
 
@@ -106,9 +131,15 @@ export default function OwnerProfile() {
 
                 </div>
                 <form className="space-y-4 ">
-                    <ProfilePicture
-                        profilePicture={user?.user?.profilePic || ''}
-                        handleFileChange={(file) => handleProfilePictureChange(file as File)}
+                    <Controller
+                        name="profilePicture"
+                        control={control}
+                        render={({ field }) => (
+                            <ProfilePicture
+                                profilePicture={user?.user?.profilePic || ''}
+                                handleFileChange={(file) => handleProfilePictureChange(file as File)}
+                            />
+                        )}
                     />
                     <div className="space-y-2">
                         <Label htmlFor="ownerName">Owner Name</Label>
@@ -150,7 +181,7 @@ export default function OwnerProfile() {
                             render={({ field }) => (
                                 <IconInput
                                     icon={Phone}
-                                    placeholder="Enter phoneNumber number"
+                                    placeholder="Enter phone number"
                                     value={field.value}
                                     onChange={field.onChange}
                                 />
@@ -193,7 +224,13 @@ export default function OwnerProfile() {
                     </div>
                 </form>
                 <Button onClick={handleSubmit(onSubmit)} className="w-full mt-4">
-                    Save
+                    {isUpdating ?
+                        (
+                            <div className="flex items-center justify-center">
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                <span>Updating...</span>
+                            </div>
+                        ) : 'Update'}
                 </Button>
 
             </div>

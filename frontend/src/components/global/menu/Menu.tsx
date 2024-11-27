@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Edit, Gem, Image, Trash2, UtensilsCrossed } from "lucide-react"
+import { Edit, Gem, Image, Loader2, Trash2, UtensilsCrossed } from "lucide-react"
 
 import { Label } from "../../ui/label"
 import { Button } from "../../ui/button"
@@ -27,6 +27,8 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
 
     const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false)
     const [dishIdToDelete, setDishIdToDelete] = useState<string | null>(null)
+    const [loadingDishIds, setLoadingDishIds] = useState<Set<string>>(new Set())
+
 
 
     const groupedDishes = menu.reduce((acc, dish) => {
@@ -38,8 +40,8 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
         return acc
     }, {} as Record<string, Dish[]>)
 
-    const [deleteMenuItem] = useDeleteMenuItemMutation();
-    const [toggleIsBestSeller] = useToggleIsBestSellerMutation();
+    const [deleteMenuItem, { isLoading: isDeletingItem }] = useDeleteMenuItemMutation();
+    const [toggleIsBestSeller, { isLoading: isTogglingBestSeller }] = useToggleIsBestSellerMutation();
 
 
 
@@ -60,10 +62,17 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
     }
 
     const handleToggleBestSeller = async (id: string) => {
+        setLoadingDishIds(prev => new Set(prev).add(id))
         try {
             await toggleIsBestSeller(id)
         } catch (error) {
             console.error("Failed to toggle best seller:", error)
+        } finally {
+            setLoadingDishIds(prev => {
+                const newSet = new Set(prev)
+                newSet.delete(id)
+                return newSet
+            })
         }
     }
 
@@ -85,6 +94,7 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
                     title="Delete Dish"
                     description="Are you sure you want to delete this dish?"
                     confirmAction={deleteDish}
+                    isLoading={isDeletingItem}
 
                 />
             )}
@@ -162,12 +172,23 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
                                                                 <Edit className="h-4 w-4 mr-2" /> Edit
                                                             </Button>
                                                             <div className="flex items-center space-x-2" key={dish._id}>
-                                                                <Switch
-                                                                    id={`best-seller-${dish._id}`}
-                                                                    checked={dish.isBestSeller}
-                                                                    onCheckedChange={() => handleToggleBestSeller(dish._id)}
-                                                                />
-                                                                <Label htmlFor={`best-seller-${dish._id}`} className="text-xs">Best Seller</Label>
+                                                                {
+                                                                    loadingDishIds.has(dish._id) ? (
+                                                                        <>
+                                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                            <Label htmlFor={`best-seller-${dish._id}`} className="text-xs">Best Seller</Label>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <Switch
+                                                                                id={`best-seller-${dish._id}`}
+                                                                                checked={dish.isBestSeller}
+                                                                                onCheckedChange={() => handleToggleBestSeller(dish._id)}
+                                                                            />
+                                                                            <Label htmlFor={`best-seller-${dish._id}`} className="text-xs">Best Seller</Label>
+                                                                        </>
+                                                                    )
+                                                                }
                                                             </div>
                                                         </div>
                                                         <Button

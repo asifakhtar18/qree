@@ -20,6 +20,7 @@ import {
     DrawerTitle,
 
 } from "@/components/ui/drawer"
+import { Loader2 } from "lucide-react"
 
 
 interface CustomModalProps {
@@ -29,11 +30,12 @@ interface CustomModalProps {
     openModal: boolean
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
     confirmAction: () => void
+    isLoading?: boolean
 }
 
 
 
-export function CustomModal({ openModal, setOpenModal, title, description, btnType = "default", confirmAction }: CustomModalProps) {
+export function CustomModal({ openModal, setOpenModal, title, description, btnType = "default", confirmAction, isLoading }: CustomModalProps) {
 
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
@@ -50,7 +52,13 @@ export function CustomModal({ openModal, setOpenModal, title, description, btnTy
                     <DrawerFooter className="pt-2">
                         <Button
                             onClick={confirmAction}
-                            variant={btnType} >Confirm</Button>
+                            variant={btnType} >{
+                                isLoading ?
+                                    <div className="flex items-center">
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Loading...
+                                    </div> : "Confirm"}
+                        </Button>
                         <DrawerClose asChild>
                             <Button variant="outline">Cancel</Button>
                         </DrawerClose>
@@ -72,7 +80,13 @@ export function CustomModal({ openModal, setOpenModal, title, description, btnTy
                 <DrawerFooter className="pt-2">
                     <Button
                         onClick={confirmAction}
-                        variant={btnType} >Confirm</Button>
+                        variant={btnType} >{
+                            isLoading ?
+                                <div className="flex items-center">
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Loading...
+                                </div> :
+                                'Confirm'}</Button>
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DrawerClose>
