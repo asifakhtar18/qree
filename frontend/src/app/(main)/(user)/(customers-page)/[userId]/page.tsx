@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Utensils, Star, MapPin, Phone, Mail, Globe, Clock } from 'lucide-react'
+import { Utensils, Star, MapPin, Phone, Mail, Globe, Clock, User } from 'lucide-react'
 import { Dish } from '@/types/types'
 import { useGetUserMenuQuery } from '@/store/apis/getMenuApi'
 import EmptyCustomerMenu from '@/components/global/loaders/EmptyCustomerMenu'
@@ -28,6 +28,7 @@ export default function CustomerMenu() {
 
     const { data: menu, isSuccess } = useGetUserMenuQuery(userId as string)
 
+    const user = menu?.user
 
 
     useEffect(() => {
@@ -98,29 +99,43 @@ export default function CustomerMenu() {
                 transition={{ duration: 0.5 }}
                 className="bg-white shadow-md"
             >
+                {user?.profilePic && (
+                    <Image
+                        src={user?.profilePic}
+                        alt={user?.restaurantName}
+                        width={200}
+                        height={200}
+                        className="w-full h-48 object-cover"
+                        priority
+                    />
+                )}
                 <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900">{"dummyRestaurantInfo.name"}</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">{user?.restaurantName}</h1>
+                    {user?.ownerName && <div className="flex items-center mt-2">
+                        <User className="h-4 w-4 mr-1 text-gray-400" />
+                        <h6 className="text-gray-600">{user?.ownerName}</h6>
+                    </div>}
                     <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-600">
-                        <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-2 text-gray-400" />
-                            <span>{ }</span>
-                        </div>
-                        <div className="flex items-center">
-                            <Phone className="h-4 w-4 mr-2 text-gray-400" />
-                            <span>{"dummyRestaurantInfo.contact"}</span>
-                        </div>
-                        <div className="flex items-center">
-                            <Mail className="h-4 w-4 mr-2 text-gray-400" />
-                            <span>{"dummyRestaurantInfo.email"}</span>
-                        </div>
-                        <div className="flex items-center">
-                            <Globe className="h-4 w-4 mr-2 text-gray-400" />
-                            <span>{"dummyRestaurantInfo.website"}</span>
-                        </div>
-                        <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-gray-400" />
-                            <span>Open: {"dummyRestaurantInfo.hours"}</span>
-                        </div>
+                        {user?.address && (
+                            <div className="flex items-center">
+                                <MapPin className="h-4 w-4 mr-2 text-gray-400" />
+                                <span>{user?.address}</span>
+                            </div>
+                        )}
+                        {user?.phoneNumber && (
+                            <div className="flex items-center">
+                                <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                                <span>{user?.phoneNumber}</span>
+                            </div>
+                        )}
+                        {
+                            user?.email && (
+                                <div className="flex items-center">
+                                    <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                                    <span>{user?.email}</span>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </motion.header>
@@ -194,6 +209,7 @@ export default function CustomerMenu() {
                                                                 width={300}
                                                                 height={300}
                                                                 className="w-full h-48 object-cover"
+                                                                priority
                                                             />
                                                         ) : (
                                                             <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
@@ -214,7 +230,7 @@ export default function CustomerMenu() {
                                                         </div>
                                                         <CardDescription className="text-sm text-gray-600 mb-4">{dish?.description}</CardDescription>
                                                         <div className="flex justify-between items-center">
-                                                            <span className="font-semibold text-lg">${dish?.price}</span>
+                                                            <span className="font-semibold text-lg">₹{dish?.price}</span>
                                                             <Dialog>
                                                                 <DialogTrigger asChild>
                                                                     <Button variant="outline" size="sm" onClick={() => setSelectedDish(dish)}>
@@ -234,10 +250,11 @@ export default function CustomerMenu() {
                                                                             src={typeof selectedDish?.image === 'string' ? selectedDish?.image : null}
                                                                             alt='Dish Image'
                                                                             className="w-full h-64 object-cover rounded-md mb-4"
+                                                                            priority
                                                                         />
 
                                                                         <p className="text-gray-600 mb-4">{selectedDish?.description}</p>
-                                                                        <p className="font-semibold text-lg mb-2">${selectedDish?.price}</p>
+                                                                        <p className="font-semibold text-lg mb-2">₹{selectedDish?.price}</p>
 
                                                                         {selectedDish?.isBestSeller && (
                                                                             <p className="text-sm text-yellow-600 flex items-center">

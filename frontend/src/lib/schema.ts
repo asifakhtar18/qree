@@ -55,5 +55,9 @@ export const ownerSchema = z.object({
     .optional(),
   address: z.string().min(1, "Address is required").optional(),
   email: z.string().email("Invalid email address"),
-  profilePicture: z.instanceof(File || String).optional(),
+  profilePicture: z.union([z.instanceof(File), z.string().url()]).optional(),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
 });

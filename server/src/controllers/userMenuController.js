@@ -1,11 +1,14 @@
 
 const Menu = require('../models/menu');
 const Category = require('../models/foodCatagory');
+const User = require('../models/user');
 
 
 exports.getMenuItemes = async (req, res) => {
     const { id } = req.params;
     try {
+        const user = await User.findById(id).select('-__v -password').lean();
+        console.log(user)
         const MenuItems = await Menu.find({ user: id })
             .select('-__v -user')
             .lean()
@@ -26,7 +29,8 @@ exports.getMenuItemes = async (req, res) => {
 
         const resturantData = {
             MenuItems,
-            categoryNames
+            categoryNames,
+            user
         }
 
         res.status(200).json(resturantData);
