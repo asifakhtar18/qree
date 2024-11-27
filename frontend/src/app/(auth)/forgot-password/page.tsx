@@ -160,7 +160,7 @@ export default function ForgotPassword() {
                             Forgot your password?
                         </h2>
                         <p className="mt-2 text-center text-sm text-gray-600 max-w">
-                            {step === 'email' && "No worries, we'll send you reset instructions."}
+                            {step === 'email' && "No worries, we'll help you reset your password."}
                             {step === 'otp' && "We've sent a 6-digit code to your email."}
                             {step === 'success' && "Your password has been reset successfully."}
                         </p>

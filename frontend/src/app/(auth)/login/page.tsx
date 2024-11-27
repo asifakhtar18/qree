@@ -79,9 +79,10 @@ export default function LoginPage() {
                             <div className="space-y-4">
                                 <div className="space-y-2">
                                     <motion.div
-                                        initial={{ opacity: 0, x: 50 }}
+                                        initial={{ opacity: 0, x: 10 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: -50 }}
+
                                     >
                                         <FormField
                                             control={control}
@@ -106,7 +107,7 @@ export default function LoginPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <motion.div
-                                        initial={{ opacity: 0, x: 50 }}
+                                        initial={{ opacity: 0, x: 10 }}
                                         animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
                                         exit={{ opacity: 0, x: -50 }}
                                     >
@@ -132,7 +133,7 @@ export default function LoginPage() {
                                 </div>
                             </div>
                             <motion.div
-                                initial={{ opacity: 0, x: 50 }}
+                                initial={{ opacity: 0, x: 10 }}
                                 animate={{ opacity: 1, x: 0, transition: { delay: 0.4 } }}
                                 exit={{ opacity: 0, x: -50 }}
                             >
