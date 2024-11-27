@@ -7,8 +7,9 @@ const User = require('../models/user');
 exports.getMenuItemes = async (req, res) => {
     const { id } = req.params;
     try {
+
         const user = await User.findById(id).select('-__v -password').lean();
-        console.log(user)
+        if (!user) return res.status(404).json({ error: 'User not found' });
         const MenuItems = await Menu.find({ user: id })
             .select('-__v -user')
             .lean()

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
@@ -25,21 +25,25 @@ export default function CustomerMenu() {
 
 
     const { userId } = useParams()
+    const router = useRouter()
 
-    const { data: menu, isSuccess } = useGetUserMenuQuery(userId as string)
+    const { data, isSuccess, isError, error } = useGetUserMenuQuery(userId as string)
 
-    const user = menu?.user
+
+
+    const user = data?.user
+
 
 
     useEffect(() => {
         if (isSuccess) {
-            const { MenuItems } = menu
+            const { MenuItems } = data
             if (MenuItems.length > 0) {
                 setDishes(MenuItems)
                 setFilteredDishes(MenuItems)
             }
         }
-    }, [isSuccess, menu?.MenuItems])
+    }, [isSuccess, data?.MenuItems])
 
 
     useEffect(() => {
@@ -86,9 +90,7 @@ export default function CustomerMenu() {
     }, {} as Record<string, Dish[]>)
 
 
-    if (menu?.MenuItems.length <= 0) {
-        return <EmptyCustomerMenu />
-    }
+
 
 
     return (
@@ -139,142 +141,145 @@ export default function CustomerMenu() {
                     </div>
                 </div>
             </motion.header>
-
             <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <div className="px-4 py-6 sm:px-0">
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <div className="mb-6">
-                            <Input
-                                placeholder="Search menu..."
-                                value={searchTerm}
-                                onChange={handleSearch}
-                                className="max-w-md mx-auto"
-                            />
-                        </div>
-                        <div className="relative mb-6 overflow-hidden">
-                            <div
-                                ref={tabsRef}
-                                className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide"
-                            >
-                                {['all', 'bestseller'].map((tab) => (
-                                    <motion.button
-                                        key={tab}
-                                        onClick={() => handleTabChange(tab)}
-                                        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ease-in-out flex items-center whitespace-nowrap ${activeTab === tab
-                                            ? 'bg-primary text-primary-foreground'
-                                            : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                                            }`}
-                                        data-value={tab}
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        {tab === 'all' && <Utensils className="h-4 w-4 mr-2" />}
-                                        {tab === 'bestseller' && <Star className="h-4 w-4 mr-2" />}
-                                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                                    </motion.button>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    <AnimatePresence mode="wait">
+                {data?.MenuItems?.length <= 0 ? (
+                    <EmptyCustomerMenu />
+                ) : (
+                    <div className="px-4 py-6 sm:px-0">
                         <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            transition={{ duration: 0.3 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            {Object.entries(groupedDishes || {}).map(([category, dishes]) => (
-                                <div key={category} className="mb-12">
-                                    <h2 className="text-2xl font-semibold mb-6 text-gray-800">{category}</h2>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {dishes?.map(dish => (
-                                            <motion.div
-                                                key={dish?._id}
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3 }}
-                                            >
-                                                <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-                                                    <CardHeader className="p-0">
-                                                        {dish?.image ? (
-                                                            <Image
-                                                                src={typeof dish.image === 'string' ? dish.image : URL.createObjectURL(dish.image)}
-                                                                alt={dish.name}
-                                                                width={300}
-                                                                height={300}
-                                                                className="w-full h-48 object-cover"
-                                                                priority
-                                                            />
-                                                        ) : (
-                                                            <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                                                No image
-                                                            </div>
-                                                        )
-                                                        }
-                                                    </CardHeader>
-                                                    <CardContent className="p-4">
-                                                        <div className="flex justify-between items-start mb-2">
-                                                            <CardTitle className="text-lg">{dish?.name}</CardTitle>
-                                                            {dish?.isBestSeller && (
-                                                                <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                                                                    <Star className="h-3 w-3 mr-1" fill="currentColor" />
-                                                                    Best Seller
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        <CardDescription className="text-sm text-gray-600 mb-4">{dish?.description}</CardDescription>
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="font-semibold text-lg">₹{dish?.price}</span>
-                                                            <Dialog>
-                                                                <DialogTrigger asChild>
-                                                                    <Button variant="outline" size="sm" onClick={() => setSelectedDish(dish)}>
-                                                                        View Details
-                                                                    </Button>
-                                                                </DialogTrigger>
-                                                                <DialogContent>
-                                                                    <DialogHeader>
-                                                                        <DialogTitle>{selectedDish?.name}</DialogTitle>
-                                                                    </DialogHeader>
-                                                                    <div className="mt-4">
-                                                                        <Image
-                                                                            width={300}
-                                                                            height={300}
-                                                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                            // @ts-ignore
-                                                                            src={typeof selectedDish?.image === 'string' ? selectedDish?.image : null}
-                                                                            alt='Dish Image'
-                                                                            className="w-full h-64 object-cover rounded-md mb-4"
-                                                                            priority
-                                                                        />
-
-                                                                        <p className="text-gray-600 mb-4">{selectedDish?.description}</p>
-                                                                        <p className="font-semibold text-lg mb-2">₹{selectedDish?.price}</p>
-
-                                                                        {selectedDish?.isBestSeller && (
-                                                                            <p className="text-sm text-yellow-600 flex items-center">
-                                                                                <Star className="h-4 w-4 mr-1" fill="currentColor" /> Best Seller
-                                                                            </p>
-                                                                        )}
-                                                                    </div>
-                                                                </DialogContent>
-                                                            </Dialog>
-                                                        </div>
-                                                    </CardContent>
-                                                </Card>
-                                            </motion.div>
-                                        ))}
-                                    </div>
+                            <div className="mb-6">
+                                <Input
+                                    placeholder="Search menu..."
+                                    value={searchTerm}
+                                    onChange={handleSearch}
+                                    className="max-w-md mx-auto"
+                                />
+                            </div>
+                            <div className="relative mb-6 overflow-hidden">
+                                <div
+                                    ref={tabsRef}
+                                    className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide"
+                                >
+                                    {['all', 'bestseller'].map((tab) => (
+                                        <motion.button
+                                            key={tab}
+                                            onClick={() => handleTabChange(tab)}
+                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ease-in-out flex items-center whitespace-nowrap ${activeTab === tab
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                                                }`}
+                                            data-value={tab}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            {tab === 'all' && <Utensils className="h-4 w-4 mr-2" />}
+                                            {tab === 'bestseller' && <Star className="h-4 w-4 mr-2" />}
+                                            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                        </motion.button>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
                         </motion.div>
-                    </AnimatePresence>
-                </div>
+
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeTab}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 20 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {Object.entries(groupedDishes || {}).map(([category, dishes]) => (
+                                    <div key={category} className="mb-12">
+                                        <h2 className="text-2xl font-semibold mb-6 text-gray-800">{category}</h2>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {dishes?.map(dish => (
+                                                <motion.div
+                                                    key={dish?._id}
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ duration: 0.3 }}
+                                                >
+                                                    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+                                                        <CardHeader className="p-0">
+                                                            {dish?.image ? (
+                                                                <Image
+                                                                    src={typeof dish.image === 'string' ? dish.image : URL.createObjectURL(dish.image)}
+                                                                    alt={dish.name}
+                                                                    width={300}
+                                                                    height={300}
+                                                                    className="w-full h-48 object-cover"
+                                                                    priority
+                                                                />
+                                                            ) : (
+                                                                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                                                    No image
+                                                                </div>
+                                                            )
+                                                            }
+                                                        </CardHeader>
+                                                        <CardContent className="p-4">
+                                                            <div className="flex justify-between items-start mb-2">
+                                                                <CardTitle className="text-lg">{dish?.name}</CardTitle>
+                                                                {dish?.isBestSeller && (
+                                                                    <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                                                                        <Star className="h-3 w-3 mr-1" fill="currentColor" />
+                                                                        Best Seller
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <CardDescription className="text-sm text-gray-600 mb-4">{dish?.description}</CardDescription>
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="font-semibold text-lg">₹{dish?.price}</span>
+                                                                <Dialog>
+                                                                    <DialogTrigger asChild>
+                                                                        <Button variant="outline" size="sm" onClick={() => setSelectedDish(dish)}>
+                                                                            View Details
+                                                                        </Button>
+                                                                    </DialogTrigger>
+                                                                    <DialogContent>
+                                                                        <DialogHeader>
+                                                                            <DialogTitle>{selectedDish?.name}</DialogTitle>
+                                                                        </DialogHeader>
+                                                                        <div className="mt-4">
+                                                                            <Image
+                                                                                width={300}
+                                                                                height={300}
+                                                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                                                // @ts-ignore
+                                                                                src={typeof selectedDish?.image === 'string' ? selectedDish?.image : null}
+                                                                                alt='Dish Image'
+                                                                                className="w-full h-64 object-cover rounded-md mb-4"
+                                                                                priority
+                                                                            />
+
+                                                                            <p className="text-gray-600 mb-4">{selectedDish?.description}</p>
+                                                                            <p className="font-semibold text-lg mb-2">₹{selectedDish?.price}</p>
+
+                                                                            {selectedDish?.isBestSeller && (
+                                                                                <p className="text-sm text-yellow-600 flex items-center">
+                                                                                    <Star className="h-4 w-4 mr-1" fill="currentColor" /> Best Seller
+                                                                                </p>
+                                                                            )}
+                                                                        </div>
+                                                                    </DialogContent>
+                                                                </Dialog>
+                                                            </div>
+                                                        </CardContent>
+                                                    </Card>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                )}
             </main>
         </div>
     )

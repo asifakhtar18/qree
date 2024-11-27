@@ -52,12 +52,16 @@ export function CustomModal({ openModal, setOpenModal, title, description, btnTy
                     <DrawerFooter className="pt-2">
                         <Button
                             onClick={confirmAction}
-                            variant={btnType} >{
+                            variant={btnType}
+                            disabled={isLoading}
+                        >
+                            {
                                 isLoading ?
                                     <div className="flex items-center">
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                         Loading...
-                                    </div> : "Confirm"}
+                                    </div> : "Confirm"
+                            }
                         </Button>
                         <DrawerClose asChild>
                             <Button variant="outline">Cancel</Button>
@@ -80,13 +84,17 @@ export function CustomModal({ openModal, setOpenModal, title, description, btnTy
                 <DrawerFooter className="pt-2">
                     <Button
                         onClick={confirmAction}
-                        variant={btnType} >{
-                            isLoading ?
-                                <div className="flex items-center">
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Loading...
-                                </div> :
-                                'Confirm'}</Button>
+                        variant={btnType}
+                        disabled={isLoading}
+                    >
+                        {isLoading ?
+                            <div className="flex items-center">
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Loading...
+                            </div> :
+                            'Confirm'
+                        }
+                    </Button>
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DrawerClose>
