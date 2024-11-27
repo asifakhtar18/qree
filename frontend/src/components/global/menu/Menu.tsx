@@ -41,7 +41,7 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
     }, {} as Record<string, Dish[]>)
 
     const [deleteMenuItem, { isLoading: isDeletingItem }] = useDeleteMenuItemMutation();
-    const [toggleIsBestSeller, { isLoading: isTogglingBestSeller }] = useToggleIsBestSellerMutation();
+    const [toggleIsBestSeller] = useToggleIsBestSellerMutation();
 
 
 

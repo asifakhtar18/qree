@@ -1,22 +1,26 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useSelector } from 'react-redux'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft, Mail, Loader2, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react'
+
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, Mail, Loader2, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react'
-import Link from 'next/link'
+import { Button } from "@/components/ui/button"
 import InputOTPForm from '@/components/global/input/otpInput'
 import IconInput from '@/components/global/input/IconInput'
-
-import { useForgotPasswordMutation, useResetPasswordMutation } from '@/store/apis/authApi'
 import { useToast } from '@/components/hooks/use-toast'
 import { ToastAction } from '@/components/ui/toast'
+
 import SideScreen from '@/components/global/side-screen/SideScreen'
+import { selectToken } from '@/store/slices/authSlice'
+import { useForgotPasswordMutation, useResetPasswordMutation } from '@/store/apis/authApi'
 
 const emailSchema = z.object({
     email: z.string().email('Please enter a valid email address'),
@@ -41,6 +45,12 @@ export default function ForgotPassword() {
     const [showResendOtp, setShowResendOtp] = useState(false)
 
     const { toast } = useToast()
+    const token = useSelector(selectToken)
+    const Router = useRouter()
+
+    if (token) {
+        Router.push('/')
+    }
 
     const emailForm = useForm<EmailForm>({
         resolver: zodResolver(emailSchema),
