@@ -77,18 +77,18 @@ export default function Component() {
                 await register({
                     email: registerForm.getValues().email
                 }).unwrap()
+
                 setLoading(false)
                 setStep(prev => Math.min(prev + 1, 3))
             }
-            catch (err) {
+            catch (err: unknown) {
                 setLoading(false)
                 toast({
-                    title: "Error",
-                    // @ts-ignore
-                    description: err?.data?.message || "Something went wrong",
+                    description: "Email already exists",
                     variant: "destructive",
                     action: <ToastAction altText="Dismiss">Dismiss</ToastAction>,
                 })
+
             }
         }
         if (step === 2) {
@@ -108,7 +108,6 @@ export default function Component() {
                 })
                 setLoading(false)
                 if (res?.data?.token) {
-                    console.log("res.data.token", res.data.token)
                     dispatch(setToken(res.data.token))
                     setStep(prev => Math.min(prev + 1, 3))
                 }
@@ -123,6 +122,7 @@ export default function Component() {
             }
         }
     };
+
     const handlePrev = () => setStep(prev => Math.max(prev - 1, 1));
 
 
