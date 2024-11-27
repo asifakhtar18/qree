@@ -161,7 +161,7 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
                                                                 className="border-black text-black hover:bg-gray-100">
                                                                 <Edit className="h-4 w-4 mr-2" /> Edit
                                                             </Button>
-                                                            <div className="flex items-center space-x-2">
+                                                            <div className="flex items-center space-x-2" key={dish._id}>
                                                                 <Switch
                                                                     id={`best-seller-${dish._id}`}
                                                                     checked={dish.isBestSeller}

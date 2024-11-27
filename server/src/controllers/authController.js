@@ -127,6 +127,7 @@ exports.updateUserDetails = async (req, res) => {
 
 
 exports.login = async (req, res) => {
+    console.log(req.body);
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -161,14 +162,14 @@ exports.forgotPassword = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
     try {
-        const { email, otp, newPassword } = req.body;
+        const { email, otp, password: newPassword } = req.body;
         const otpDoc = await OTP.findOne({ email, otp });
         if (!otpDoc) return res.status(400).json({ message: 'Invalid OTP' });
 
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        user.password = await bcrypt.hash(newPassword, 12);
+        user.password = newPassword;
         await user.save();
 
         await OTP.deleteOne({ _id: otpDoc._id });
