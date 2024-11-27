@@ -20,6 +20,7 @@ import { setToken } from '@/store/slices/authSlice'
 import { loginSchema } from '@/lib/schema'
 import { useLoginMutation } from '@/store/apis/authApi'
 import { selectToken } from '@/store/slices/authSlice'
+import SideScreen from '@/components/global/side-screen/SideScreen'
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -64,7 +65,9 @@ export default function LoginPage() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-50 to-primary-100">
-            <div className="w-full h-screen bg-primary hidden md:block" />
+            <SideScreen />
+            {/* <div className="w-full h-screen bg-primary hidden md:block">
+            </div> */}
             <div className="w-full max-w-md">
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>

@@ -31,6 +31,7 @@ import { registerPageTexts } from '@/lib/contants'
 
 import { useRegisterMutation, useVerifyEmailMutation, useUpdateUserMutation } from '@/store/apis/authApi'
 import ProfilePicture from '@/components/global/input/profilePicUpload'
+import SideScreen from '@/components/global/side-screen/SideScreen'
 
 export default function Component() {
     const [step, setStep] = useState(1)
@@ -173,7 +174,7 @@ export default function Component() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-50 to-primary-100">
 
-            <div className="w-full h-screen bg-primary hidden md:block " />
+            <SideScreen />
 
             <div className="w-full max-w-md ">
                 <CardHeader>

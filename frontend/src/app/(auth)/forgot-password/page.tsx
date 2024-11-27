@@ -16,6 +16,7 @@ import IconInput from '@/components/global/input/IconInput'
 import { useForgotPasswordMutation, useResetPasswordMutation } from '@/store/apis/authApi'
 import { useToast } from '@/components/hooks/use-toast'
 import { ToastAction } from '@/components/ui/toast'
+import SideScreen from '@/components/global/side-screen/SideScreen'
 
 const emailSchema = z.object({
     email: z.string().email('Please enter a valid email address'),
@@ -144,8 +145,9 @@ export default function ForgotPassword() {
 
 
     return (
-        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-50 to-primary-100">
+            <SideScreen />
+            <div className="w-full max-w-md">
                 {step === 'email' &&
                     <Link href="/login" className="flex items-center justify-center text-sm text-gray-600 hover:text-gray-900 mb-8">
                         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -307,6 +309,6 @@ export default function ForgotPassword() {
                     </p>
                 </div>}
             </div>
-        </div >
+        </div>
     )
 }
