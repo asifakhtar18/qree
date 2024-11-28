@@ -159,7 +159,7 @@ const Menu = ({ menu, categories, setDishToEdit, setIsEditingDish, setIsDishDial
                                                             }
 
                                                             <p className="text-sm text-gray-600 mb-2 ">{dish.description}</p>
-                                                            <p className="font-semibold text-black ">${dish.price}</p>
+                                                            <p className="font-semibold text-black ">₹{dish.price}</p>
                                                         </div>
                                                     </CardContent>
                                                     <CardFooter className="flex flex-col space-y-2">
